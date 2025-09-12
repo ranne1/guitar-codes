@@ -393,7 +393,6 @@ export function NoteMatchGame({ onBack }: NoteMatchGameProps) {
               {shuffledNames.map((chordName, index) => (
                 <ChordNameCard
                   key={`name-${index}`}
-                  id={chordName}
                   chordName={chordName}
                   isFlipped={flippedCards.has(chordName)}
                   isSelected={selectedCards.includes(chordName)}
