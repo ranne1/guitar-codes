@@ -44,17 +44,24 @@ app.get('/api/scores/:gameMode', (req, res) => {
   const { gameMode } = req.params;
   const scores = readScores();
   
+  console.log('최고점 조회 요청:', gameMode);
+  console.log('현재 점수 데이터:', scores);
+  
   if (!scores[gameMode] || scores[gameMode].length === 0) {
+    console.log('게임 모드에 점수 없음:', gameMode);
     return res.json({ bestScore: 0 });
   }
   
   const bestScore = Math.max(...scores[gameMode].map(score => score.score));
+  console.log('계산된 최고점:', bestScore, '게임모드:', gameMode);
   res.json({ bestScore });
 });
 
 // 점수 저장 API
 app.post('/api/scores', (req, res) => {
   const { gameMode, playerName, score } = req.body;
+  
+  console.log('점수 저장 요청:', { gameMode, playerName, score });
   
   if (!gameMode || score === undefined) {
     return res.status(400).json({ error: 'gameMode와 score는 필수입니다.' });
@@ -65,6 +72,7 @@ app.post('/api/scores', (req, res) => {
   // 게임 모드별 점수 배열 초기화
   if (!scores[gameMode]) {
     scores[gameMode] = [];
+    console.log('새 게임 모드 생성:', gameMode);
   }
   
   // 현재 최고점 확인
@@ -73,6 +81,7 @@ app.post('/api/scores', (req, res) => {
     : 0;
   
   const isNewRecord = score > currentBest;
+  console.log('현재 최고점:', currentBest, '새 점수:', score, '신기록 여부:', isNewRecord);
   
   // 새 점수 추가
   const newScore = {

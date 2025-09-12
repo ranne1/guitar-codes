@@ -69,10 +69,12 @@ export function useScoreSystem(gameMode: string, maxTime: number = 10) {
   const [bestScore, setBestScore] = useState(0);
   const [playerName, setPlayerName] = useState('');
 
-  // 컴포넌트 마운트 시 최고점 로드
+  // 게임 모드가 변경될 때마다 최고점 로드
   useEffect(() => {
     const loadBestScore = async () => {
+      console.log('최고점 로드 시도:', gameMode);
       const score = await fetchBestScore(gameMode);
+      console.log('로드된 최고점:', score, '게임모드:', gameMode);
       setBestScore(score);
     };
     loadBestScore();
