@@ -15,7 +15,7 @@ interface LeaderboardProps {
   onClose: () => void;
 }
 
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = '/api';
 
 // 게임 모드별 한국어 이름 매핑
 const getGameModeName = (mode: string) => {

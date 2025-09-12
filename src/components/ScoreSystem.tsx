@@ -18,7 +18,7 @@ export interface ScoreData {
 }
 
 // API 호출 함수들
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = '/api';
 
 async function fetchBestScore(gameMode: string): Promise<number> {
   try {
