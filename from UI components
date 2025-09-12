@@ -1,0 +1,44 @@
+warning: in the working copy of 'FigmaStyleSpecification.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/components/ChordInputGame.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/components/FretboardMatchGame.tsx', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/FigmaStyleSpecification.tsx b/FigmaStyleSpecification.tsx[m
+[1mindex 4147f20..0d03ce5 100644[m
+[1m--- a/FigmaStyleSpecification.tsx[m
+[1m+++ b/FigmaStyleSpecification.tsx[m
+[36m@@ -519,7 +519,7 @@[m [mexport default function FigmaStyleSpecification({ onBack }: FigmaStyleSpecificat[m
+                 <Guitar className="w-6 h-6 text-white" />[m
+               </div>[m
+               <div>[m
+[31m-                <h3 className="font-medium">짝짓기 (지판)</h3>[m
+[32m+[m[32m                <h3 className="font-medium">짝짓기</h3>[m
+                 <p className="text-sm text-muted-foreground">기타 지판에서 코드 위치 맞추기</p>[m
+               </div>[m
+             </div>[m
+[1mdiff --git a/src/components/ChordInputGame.tsx b/src/components/ChordInputGame.tsx[m
+[1mindex a60e319..cb398cf 100644[m
+[1m--- a/src/components/ChordInputGame.tsx[m
+[1m+++ b/src/components/ChordInputGame.tsx[m
+[36m@@ -461,7 +461,7 @@[m [mexport function ChordInputGame({ onBack }: ChordInputGameProps) {[m
+           [m
+           <div className="text-center">[m
+             <h1 className="text-xl font-bold text-gray-800">코드 입력</h1>[m
+[31m-            <p className="text-sm text-gray-600">빠르게 정답을 맞춰 높은 점수를 얻어보세요!</p>[m
+[32m+[m[32m            <p className="text-sm text-gray-600"></p>[m
+           </div>[m
+           [m
+           <div className="flex items-center gap-2">[m
+[1mdiff --git a/src/components/FretboardMatchGame.tsx b/src/components/FretboardMatchGame.tsx[m
+[1mindex 6de2b71..c64020d 100644[m
+[1m--- a/src/components/FretboardMatchGame.tsx[m
+[1m+++ b/src/components/FretboardMatchGame.tsx[m
+[36m@@ -272,8 +272,8 @@[m [mexport function FretboardMatchGame({ onBack }: FretboardMatchGameProps) {[m
+           </Button>[m
+           [m
+           <div className="text-center">[m
+[31m-            <h1 className="text-xl font-bold">짝짓기 (지판)</h1>[m
+[31m-            <p className="text-sm text-muted-foreground">빠르게 정답을 맞춰 높은 점수를 얻어보세요!</p>[m
+[32m+[m[32m            <h1 className="text-xl font-bold">짝짓기</h1>[m
+[32m+[m[32m            <p className="text-sm text-muted-foreground"></p>[m
+           </div>[m
+           [m
+           <div className="flex items-center gap-2">[m

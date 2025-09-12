@@ -519,7 +519,7 @@ export default function FigmaStyleSpecification({ onBack }: FigmaStyleSpecificat
                 <Guitar className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h3 className="font-medium">짝짓기 (지판)</h3>
+                <h3 className="font-medium">짝짓기</h3>
                 <p className="text-sm text-muted-foreground">기타 지판에서 코드 위치 맞추기</p>
               </div>
             </div>

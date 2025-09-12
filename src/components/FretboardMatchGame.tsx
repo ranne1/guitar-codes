@@ -272,8 +272,8 @@ export function FretboardMatchGame({ onBack }: FretboardMatchGameProps) {
           </Button>
           
           <div className="text-center">
-            <h1 className="text-xl font-bold">짝짓기 (지판)</h1>
-            <p className="text-sm text-muted-foreground">빠르게 정답을 맞춰 높은 점수를 얻어보세요!</p>
+            <h1 className="text-xl font-bold">짝짓기</h1>
+            <p className="text-sm text-muted-foreground"></p>
           </div>
           
           <div className="flex items-center gap-2">

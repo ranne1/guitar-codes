@@ -461,7 +461,7 @@ export function ChordInputGame({ onBack }: ChordInputGameProps) {
           
           <div className="text-center">
             <h1 className="text-xl font-bold text-gray-800">코드 입력</h1>
-            <p className="text-sm text-gray-600">빠르게 정답을 맞춰 높은 점수를 얻어보세요!</p>
+            <p className="text-sm text-gray-600"></p>
           </div>
           
           <div className="flex items-center gap-2">
