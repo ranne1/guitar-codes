@@ -1,11 +1,11 @@
-# 기타 코드 마스터 프로젝트
+ㅐㅐ# 기타 코드 마스터 프로젝트
 
 ## 🚀 배포
 
 ### Vercel 배포
 이 프로젝트는 Vercel에서 자동 배포됩니다.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/guitar-codes)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/guitar-codes-app-2024)
 
 ### 로컬 개발
 ```bash
