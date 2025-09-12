@@ -17,14 +17,40 @@ export interface ScoreData {
   isNewRecord: boolean;
 }
 
-// API 호출 함수들
-const API_BASE_URL = '/api';
+// localStorage를 사용한 데이터 관리
+const STORAGE_KEY = 'guitar-codes-scores';
+
+function getScores() {
+  try {
+    const data = localStorage.getItem(STORAGE_KEY);
+    return data ? JSON.parse(data) : {};
+  } catch (error) {
+    console.error('점수 데이터 읽기 오류:', error);
+    return {};
+  }
+}
+
+function saveScores(scores: any) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(scores));
+  } catch (error) {
+    console.error('점수 데이터 저장 오류:', error);
+  }
+}
 
 async function fetchBestScore(gameMode: string): Promise<number> {
   try {
-    const response = await fetch(`${API_BASE_URL}/scores?gameMode=${gameMode}`);
-    const data = await response.json();
-    return data.bestScore || 0;
+    console.log('최고점 조회 시도:', gameMode);
+    const scores = getScores();
+    
+    if (!scores[gameMode] || scores[gameMode].length === 0) {
+      console.log('게임 모드에 점수 없음:', gameMode);
+      return 0;
+    }
+    
+    const bestScore = Math.max(...scores[gameMode].map((score: any) => score.score));
+    console.log('로드된 최고점:', bestScore, '게임모드:', gameMode);
+    return bestScore;
   } catch (error) {
     console.error('최고점 조회 오류:', error);
     return 0;
@@ -34,24 +60,55 @@ async function fetchBestScore(gameMode: string): Promise<number> {
 async function saveScore(gameMode: string, playerName: string, score: number) {
   try {
     console.log('점수 저장 시도:', { gameMode, playerName, score });
-    const response = await fetch(`${API_BASE_URL}/scores`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        gameMode,
-        playerName,
-        score
-      })
-    });
     
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    const scores = getScores();
+    
+    // 게임 모드별 점수 배열 초기화
+    if (!scores[gameMode]) {
+      scores[gameMode] = [];
     }
     
-    const result = await response.json();
-    console.log('점수 저장 응답:', result);
+    // 현재 최고점 확인
+    const currentBest = scores[gameMode].length > 0 
+      ? Math.max(...scores[gameMode].map((s: any) => s.score)) 
+      : 0;
+    
+    const isNewRecord = score > currentBest;
+    console.log('현재 최고점:', currentBest, '새 점수:', score, '신기록 여부:', isNewRecord);
+    
+    // 새 점수 추가
+    const newScore = {
+      id: Date.now(),
+      playerName: playerName || 'Anonymous',
+      score: score,
+      timestamp: new Date().toISOString()
+    };
+    
+    scores[gameMode].push(newScore);
+    
+    // 점수 순으로 정렬 (높은 점수부터)
+    scores[gameMode].sort((a: any, b: any) => b.score - a.score);
+    
+    // 상위 100개만 유지
+    if (scores[gameMode].length > 100) {
+      scores[gameMode] = scores[gameMode].slice(0, 100);
+    }
+    
+    saveScores(scores);
+    
+    // 순위 계산
+    const rank = scores[gameMode].findIndex((s: any) => s.id === newScore.id) + 1;
+    
+    const result = {
+      success: true,
+      isNewRecord,
+      previousBest: currentBest,
+      newScore: score,
+      rank: rank,
+      playerName: newScore.playerName
+    };
+    
+    console.log('점수 저장 완료:', result);
     return result;
   } catch (error) {
     console.error('점수 저장 오류:', error);
