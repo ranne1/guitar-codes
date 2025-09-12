@@ -398,7 +398,7 @@ export function NoteMatchGame({ onBack }: NoteMatchGameProps) {
                   isFlipped={flippedCards.has(chordName)}
                   isSelected={selectedCards.includes(chordName)}
                   isMatched={matchedPairs.has(chordName)}
-                  onClick={handleCardClick}
+                  onClick={() => handleCardClick(chordName)}
                 />
               ))}
             </div>
