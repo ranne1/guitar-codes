@@ -17,6 +17,16 @@ interface LeaderboardProps {
 
 const API_BASE_URL = 'http://localhost:3001/api';
 
+// 게임 모드별 한국어 이름 매핑
+const getGameModeName = (mode: string) => {
+  const gameNames: { [key: string]: string } = {
+    'chord-input': '코드 입력 게임',
+    'fretboard-match': '프렛보드 매칭 게임',
+    'note-match': '음표 매칭 게임'
+  };
+  return gameNames[mode] || mode;
+};
+
 export function Leaderboard({ gameMode, isOpen, onClose }: LeaderboardProps) {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(false);
@@ -70,7 +80,10 @@ export function Leaderboard({ gameMode, isOpen, onClose }: LeaderboardProps) {
       <div className="bg-white rounded-lg max-w-2xl w-full max-h-[80vh] overflow-hidden">
         {/* 헤더 */}
         <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-2xl font-bold text-gray-800">리더보드</h2>
+          <div>
+            <h2 className="text-2xl font-bold text-gray-800">리더보드</h2>
+            <p className="text-sm text-gray-600 mt-1">{getGameModeName(gameMode)}</p>
+          </div>
           <Button
             variant="ghost"
             size="icon"
@@ -109,9 +122,14 @@ export function Leaderboard({ gameMode, isOpen, onClose }: LeaderboardProps) {
                     <div className="flex items-center justify-center w-8">
                       {getRankIcon(entry.rank)}
                     </div>
-                    <div>
-                      <div className="font-medium text-gray-800">
-                        {entry.playerName}
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-medium text-gray-800">
+                          {entry.playerName}
+                        </span>
+                        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                          {getGameModeName(gameMode)}
+                        </span>
                       </div>
                       <div className="text-sm text-gray-500">
                         {formatDate(entry.timestamp)}
