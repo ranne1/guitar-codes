@@ -129,10 +129,15 @@ export function useScoreSystem(gameMode: string, maxTime: number = 10) {
   // 게임 모드가 변경될 때마다 최고점 로드
   useEffect(() => {
     const loadBestScore = async () => {
-      console.log('최고점 로드 시도:', gameMode);
+      console.log('=== 최고점 로드 시작 ===');
+      console.log('게임모드:', gameMode);
+      console.log('현재 localStorage 데이터:', localStorage.getItem(STORAGE_KEY));
+      
       const score = await fetchBestScore(gameMode);
       console.log('로드된 최고점:', score, '게임모드:', gameMode);
       setBestScore(score);
+      
+      console.log('=== 최고점 로드 완료 ===');
     };
     loadBestScore();
   }, [gameMode]);
@@ -184,13 +189,23 @@ export function useScoreSystem(gameMode: string, maxTime: number = 10) {
 
   // 라운드 완료 처리 (자동으로 이름 입력 받고 저장)
   const completeRound = async (finalScore: number, playerNameInput?: string) => {
+    console.log('=== completeRound 시작 ===');
+    console.log('finalScore:', finalScore);
+    console.log('playerNameInput:', playerNameInput);
+    console.log('current playerName:', playerName);
+    console.log('current bestScore:', bestScore);
+    console.log('gameMode:', gameMode);
+    
     // 이름이 제공되지 않으면 기본값 사용
     const nameToUse = playerNameInput || playerName || 'Anonymous';
+    console.log('사용할 이름:', nameToUse);
     
     // 클라이언트에서도 최고점 비교
     const isNewRecord = finalScore > bestScore;
+    console.log('클라이언트 신기록 여부:', isNewRecord);
     
     const result = await saveScore(gameMode, nameToUse, finalScore);
+    console.log('저장 결과:', result);
     
     if (result.success) {
       // 서버 응답과 클라이언트 비교 중 하나라도 신기록이면 신기록으로 처리
@@ -204,6 +219,7 @@ export function useScoreSystem(gameMode: string, maxTime: number = 10) {
       } else {
         console.log('신기록 아님', finalScore, '현재 최고점:', bestScore);
       }
+      console.log('=== completeRound 완료 (성공) ===');
       return isActuallyNewRecord;
     } else {
       // 서버 저장 실패해도 클라이언트에서 신기록이면 처리
@@ -212,9 +228,11 @@ export function useScoreSystem(gameMode: string, maxTime: number = 10) {
         setBestScore(finalScore);
         setPlayerName(nameToUse);
         console.log('로컬 신기록 달성!', finalScore, '이전 최고점:', bestScore);
+        console.log('=== completeRound 완료 (로컬 신기록) ===');
         return true;
       }
       setIsNewRecord(false);
+      console.log('=== completeRound 완료 (실패) ===');
       return false;
     }
   };
