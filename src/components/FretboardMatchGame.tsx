@@ -211,21 +211,8 @@ export function FretboardMatchGame({ onBack }: FretboardMatchGameProps) {
   // 게임 종료 (중간에 종료)
   const endGame = async () => {
     if (scoreSystem.totalScore > 0) {
-      // 현재 점수를 서버에 저장
-      try {
-        await fetch('http://localhost:3001/api/scores', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            gameMode: 'fretboard-match', 
-            score: scoreSystem.totalScore, 
-            playerName: scoreSystem.playerName || '익명' 
-          }),
-        });
-        console.log('게임 종료 - 점수 저장됨:', scoreSystem.totalScore);
-      } catch (error) {
-        console.error("Failed to save score:", error);
-      }
+      // completeRound를 사용해서 자동으로 점수 저장
+      await scoreSystem.completeRound(scoreSystem.totalScore);
     }
     setIsGameCompleted(true);
   };
@@ -370,7 +357,13 @@ export function FretboardMatchGame({ onBack }: FretboardMatchGameProps) {
             onRestart={resetGame}
             onBack={onBack}
             playerName={scoreSystem.playerName}
-            onPlayerNameChange={scoreSystem.setPlayerName}
+            onPlayerNameChange={async (name) => {
+              scoreSystem.setPlayerName(name);
+              // 이름이 변경되면 자동으로 점수 다시 저장
+              if (name.trim() && scoreSystem.totalScore > 0) {
+                await scoreSystem.completeRound(scoreSystem.totalScore, name);
+              }
+            }}
           />
         )}
 

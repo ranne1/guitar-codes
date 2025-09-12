@@ -1,0 +1,105 @@
+warning: in the working copy of 'src/components/FretboardMatchGame.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/components/GuitarChordCard.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/components/ScoreSystem.tsx', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/src/components/FretboardMatchGame.tsx b/src/components/FretboardMatchGame.tsx[m
+[1mindex c64020d..b834009 100644[m
+[1m--- a/src/components/FretboardMatchGame.tsx[m
+[1m+++ b/src/components/FretboardMatchGame.tsx[m
+[36m@@ -211,21 +211,8 @@[m [mexport function FretboardMatchGame({ onBack }: FretboardMatchGameProps) {[m
+   // 게임 종료 (중간에 종료)[m
+   const endGame = async () => {[m
+     if (scoreSystem.totalScore > 0) {[m
+[31m-      // 현재 점수를 서버에 저장[m
+[31m-      try {[m
+[31m-        await fetch('http://localhost:3001/api/scores', {[m
+[31m-          method: 'POST',[m
+[31m-          headers: { 'Content-Type': 'application/json' },[m
+[31m-          body: JSON.stringify({ [m
+[31m-            gameMode: 'fretboard-match', [m
+[31m-            score: scoreSystem.totalScore, [m
+[31m-            playerName: scoreSystem.playerName || '익명' [m
+[31m-          }),[m
+[31m-        });[m
+[31m-        console.log('게임 종료 - 점수 저장됨:', scoreSystem.totalScore);[m
+[31m-      } catch (error) {[m
+[31m-        console.error("Failed to save score:", error);[m
+[31m-      }[m
+[32m+[m[32m      // completeRound를 사용해서 자동으로 점수 저장[m
+[32m+[m[32m      await scoreSystem.completeRound(scoreSystem.totalScore);[m
+     }[m
+     setIsGameCompleted(true);[m
+   };[m
+[36m@@ -370,7 +357,13 @@[m [mexport function FretboardMatchGame({ onBack }: FretboardMatchGameProps) {[m
+             onRestart={resetGame}[m
+             onBack={onBack}[m
+             playerName={scoreSystem.playerName}[m
+[31m-            onPlayerNameChange={scoreSystem.setPlayerName}[m
+[32m+[m[32m            onPlayerNameChange={async (name) => {[m
+[32m+[m[32m              scoreSystem.setPlayerName(name);[m
+[32m+[m[32m              // 이름이 변경되면 자동으로 점수 다시 저장[m
+[32m+[m[32m              if (name.trim() && scoreSystem.totalScore > 0) {[m
+[32m+[m[32m                await scoreSystem.completeRound(scoreSystem.totalScore, name);[m
+[32m+[m[32m              }[m
+[32m+[m[32m            }}[m
+           />[m
+         )}[m
+ [m
+[1mdiff --git a/src/components/GuitarChordCard.tsx b/src/components/GuitarChordCard.tsx[m
+[1mindex fe65275..a2f73c6 100644[m
+[1m--- a/src/components/GuitarChordCard.tsx[m
+[1m+++ b/src/components/GuitarChordCard.tsx[m
+[36m@@ -125,7 +125,7 @@[m [mexport function GuitarChordCard({ chord, isSelected, onClick, showName = false }[m
+ [m
+   return ([m
+     <Card [m
+[31m-      className={`cursor-pointer transition-all duration-200 hover:shadow-md min-h-[107px] ${[m
+[32m+[m[32m      className={`cursor-pointer transition-all duration-200 hover:shadow-md min-h-[112px] ${[m
+         isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : ''[m
+       }`}[m
+       onClick={onClick}[m
+[1mdiff --git a/src/components/ScoreSystem.tsx b/src/components/ScoreSystem.tsx[m
+[1mindex 1fd1751..b28a090 100644[m
+[1m--- a/src/components/ScoreSystem.tsx[m
+[1m+++ b/src/components/ScoreSystem.tsx[m
+[36m@@ -115,14 +115,18 @@[m [mexport function useScoreSystem(gameMode: string, maxTime: number = 10) {[m
+     return 0;[m
+   };[m
+ [m
+[31m-  // 라운드 완료 처리[m
+[31m-  const completeRound = async (finalScore: number) => {[m
+[31m-    const result = await saveScore(gameMode, playerName, finalScore);[m
+[32m+[m[32m  // 라운드 완료 처리 (자동으로 이름 입력 받고 저장)[m
+[32m+[m[32m  const completeRound = async (finalScore: number, playerNameInput?: string) => {[m
+[32m+[m[32m    // 이름이 제공되지 않으면 기본값 사용[m
+[32m+[m[32m    const nameToUse = playerNameInput || playerName || 'Anonymous';[m
+[32m+[m[41m    [m
+[32m+[m[32m    const result = await saveScore(gameMode, nameToUse, finalScore);[m
+     [m
+     if (result.success) {[m
+       setIsNewRecord(result.isNewRecord);[m
+       if (result.isNewRecord) {[m
+         setBestScore(finalScore);[m
+[32m+[m[32m        setPlayerName(nameToUse); // 이름 업데이트[m
+         console.log('신기록 달성!', finalScore, '이전 최고점:', result.previousBest);[m
+       } else {[m
+         console.log('신기록 아님', finalScore, '현재 최고점:', result.previousBest);[m
+[36m@@ -276,12 +280,17 @@[m [mexport function ResultDisplay({[m
+   playerName,[m
+   onPlayerNameChange[m
+ }: ResultDisplayProps) {[m
+[31m-  const [showNameInput, setShowNameInput] = useState(false);[m
+[31m-  const [tempName, setTempName] = useState(playerName);[m
+[32m+[m[32m  const [showNameInput, setShowNameInput] = useState(true); // 자동으로 이름 입력 표시[m
+[32m+[m[32m  const [tempName, setTempName] = useState(playerName || '');[m
+ [m
+   const handleNameSubmit = () => {[m
+     onPlayerNameChange(tempName);[m
+     setShowNameInput(false);[m
+[32m+[m[32m    // 이름이 변경되면 자동으로 점수 저장[m
+[32m+[m[32m    if (tempName.trim()) {[m
+[32m+[m[32m      // 부모 컴포넌트에서 completeRound를 다시 호출하도록 알림[m
+[32m+[m[32m      // 이는 부모 컴포넌트에서 처리해야 함[m
+[32m+[m[32m    }[m
+   };[m
+ [m
+   return ([m

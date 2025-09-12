@@ -115,14 +115,18 @@ export function useScoreSystem(gameMode: string, maxTime: number = 10) {
     return 0;
   };
 
-  // 라운드 완료 처리
-  const completeRound = async (finalScore: number) => {
-    const result = await saveScore(gameMode, playerName, finalScore);
+  // 라운드 완료 처리 (자동으로 이름 입력 받고 저장)
+  const completeRound = async (finalScore: number, playerNameInput?: string) => {
+    // 이름이 제공되지 않으면 기본값 사용
+    const nameToUse = playerNameInput || playerName || 'Anonymous';
+    
+    const result = await saveScore(gameMode, nameToUse, finalScore);
     
     if (result.success) {
       setIsNewRecord(result.isNewRecord);
       if (result.isNewRecord) {
         setBestScore(finalScore);
+        setPlayerName(nameToUse); // 이름 업데이트
         console.log('신기록 달성!', finalScore, '이전 최고점:', result.previousBest);
       } else {
         console.log('신기록 아님', finalScore, '현재 최고점:', result.previousBest);
@@ -276,12 +280,17 @@ export function ResultDisplay({
   playerName,
   onPlayerNameChange
 }: ResultDisplayProps) {
-  const [showNameInput, setShowNameInput] = useState(false);
-  const [tempName, setTempName] = useState(playerName);
+  const [showNameInput, setShowNameInput] = useState(true); // 자동으로 이름 입력 표시
+  const [tempName, setTempName] = useState(playerName || '');
 
   const handleNameSubmit = () => {
     onPlayerNameChange(tempName);
     setShowNameInput(false);
+    // 이름이 변경되면 자동으로 점수 저장
+    if (tempName.trim()) {
+      // 부모 컴포넌트에서 completeRound를 다시 호출하도록 알림
+      // 이는 부모 컴포넌트에서 처리해야 함
+    }
   };
 
   return (
