@@ -359,9 +359,10 @@ export function FretboardMatchGame({ onBack }: FretboardMatchGameProps) {
             playerName={scoreSystem.playerName}
             onPlayerNameChange={async (name) => {
               scoreSystem.setPlayerName(name);
-              // 이름이 변경되면 자동으로 점수 다시 저장
+              // 이름이 변경되면 자동으로 점수 다시 저장하고 최고점 갱신
               if (name.trim() && scoreSystem.totalScore > 0) {
-                await scoreSystem.completeRound(scoreSystem.totalScore, name);
+                const isNewRecord = await scoreSystem.completeRound(scoreSystem.totalScore, name);
+                console.log('이름 변경 후 점수 저장 완료, 신기록 여부:', isNewRecord);
               }
             }}
           />

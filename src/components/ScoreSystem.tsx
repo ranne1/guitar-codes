@@ -120,19 +120,33 @@ export function useScoreSystem(gameMode: string, maxTime: number = 10) {
     // 이름이 제공되지 않으면 기본값 사용
     const nameToUse = playerNameInput || playerName || 'Anonymous';
     
+    // 클라이언트에서도 최고점 비교
+    const isNewRecord = finalScore > bestScore;
+    
     const result = await saveScore(gameMode, nameToUse, finalScore);
     
     if (result.success) {
-      setIsNewRecord(result.isNewRecord);
-      if (result.isNewRecord) {
+      // 서버 응답과 클라이언트 비교 중 하나라도 신기록이면 신기록으로 처리
+      const isActuallyNewRecord = result.isNewRecord || isNewRecord;
+      setIsNewRecord(isActuallyNewRecord);
+      
+      if (isActuallyNewRecord) {
         setBestScore(finalScore);
         setPlayerName(nameToUse); // 이름 업데이트
-        console.log('신기록 달성!', finalScore, '이전 최고점:', result.previousBest);
+        console.log('신기록 달성!', finalScore, '이전 최고점:', bestScore);
       } else {
-        console.log('신기록 아님', finalScore, '현재 최고점:', result.previousBest);
+        console.log('신기록 아님', finalScore, '현재 최고점:', bestScore);
       }
-      return result.isNewRecord;
+      return isActuallyNewRecord;
     } else {
+      // 서버 저장 실패해도 클라이언트에서 신기록이면 처리
+      if (isNewRecord) {
+        setIsNewRecord(true);
+        setBestScore(finalScore);
+        setPlayerName(nameToUse);
+        console.log('로컬 신기록 달성!', finalScore, '이전 최고점:', bestScore);
+        return true;
+      }
       setIsNewRecord(false);
       return false;
     }
