@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { MusicNoteCard } from "./MusicNoteCard";
 import { ChordNameCard } from "./ChordNameCard";
-import { ArrowLeft, RotateCcw, Trophy } from "lucide-react";
+import { ArrowLeft, RotateCcw } from "lucide-react";
 import { Button } from "./ui/button";
 import { useScoreSystem, ScoreDisplay, ResultDisplay } from "./ScoreSystem";
 
@@ -304,7 +304,7 @@ export function NoteMatchGame({ onBack }: NoteMatchGameProps) {
 
     if (isNoteToName || isNameToNote) {
       // 매칭 성공
-      const earnedScore = scoreSystem.handleCorrectAnswer();
+      scoreSystem.handleCorrectAnswer();
       setMatchedPairs(prev => new Set([...prev, card1, card2]));
     } else {
       // 매칭 실패
@@ -424,6 +424,8 @@ export function NoteMatchGame({ onBack }: NoteMatchGameProps) {
             isNewRecord={scoreSystem.isNewRecord}
             onRestart={resetGame}
             onBack={onBack}
+            playerName=""
+            onPlayerNameChange={() => {}}
           />
         )}
       </div>

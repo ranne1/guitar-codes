@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { GuitarChordCard } from "./GuitarChordCard";
 import { ChordNameCard } from "./ChordNameCard";
 import { Button } from "./ui/button";
-import { ArrowLeft, RotateCcw, Music, Trophy, Square } from "lucide-react";
+import { ArrowLeft, RotateCcw, Trophy, Square } from "lucide-react";
 import { useScoreSystem, ScoreDisplay, ResultDisplay } from "./ScoreSystem";
 import { Leaderboard } from "./Leaderboard";
 
@@ -235,7 +235,7 @@ export function FretboardMatchGame({ onBack }: FretboardMatchGameProps) {
       const chord = gameChords.find(c => c.id === selectedChord);
       if (chord && chord.name === selectedName) {
         // 정답!
-        const earnedScore = scoreSystem.handleCorrectAnswer();
+        scoreSystem.handleCorrectAnswer();
         setTimeout(() => {
           setMatches(prev => new Set([...prev, selectedChord, selectedName]));
           setSelectedChord(null);

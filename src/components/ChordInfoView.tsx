@@ -416,7 +416,6 @@ export function ChordInfoView({ onBack }: ChordInfoViewProps) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
 
   const categories = ["전체", "메이저", "마이너", "세븐스", "바레", "기타"];
-  const difficulties = ["초급", "중급", "고급"];
 
   // 필터링된 코드 목록
   const filteredChords = chordDatabase.filter(chord => {
@@ -428,7 +427,6 @@ export function ChordInfoView({ onBack }: ChordInfoViewProps) {
 
   // 기타 지판 렌더링
   const renderChordDiagram = (chord: ChordInfo) => {
-    const strings = 6;
     const frets = 5;
     const stringNames = ['E', 'B', 'G', 'D', 'A', 'E']; // 1번줄부터 6번줄까지
 

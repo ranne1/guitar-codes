@@ -353,7 +353,6 @@ export function ChordInputGame({ onBack }: ChordInputGameProps) {
 
   // 기타 지판 렌더링
   const renderFretboard = () => {
-    const strings = 6;
     const frets = 5;
     const stringNames = ['E', 'B', 'G', 'D', 'A', 'E']; // 1번줄부터 6번줄까지
 
