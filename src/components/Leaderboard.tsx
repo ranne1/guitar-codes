@@ -30,8 +30,15 @@ export function Leaderboard({ gameMode, isOpen, onClose }: LeaderboardProps) {
   const fetchLeaderboard = async () => {
     setLoading(true);
     try {
+      console.log('리더보드 조회 시도:', gameMode);
       const response = await fetch(`${API_BASE_URL}/scores/${gameMode}/leaderboard?limit=20`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const data = await response.json();
+      console.log('리더보드 조회 응답:', data);
       setLeaderboard(data.leaderboard || []);
     } catch (error) {
       console.error('리더보드 조회 오류:', error);

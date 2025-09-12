@@ -33,6 +33,7 @@ async function fetchBestScore(gameMode: string): Promise<number> {
 
 async function saveScore(gameMode: string, playerName: string, score: number) {
   try {
+    console.log('점수 저장 시도:', { gameMode, playerName, score });
     const response = await fetch(`${API_BASE_URL}/scores`, {
       method: 'POST',
       headers: {
@@ -44,7 +45,14 @@ async function saveScore(gameMode: string, playerName: string, score: number) {
         score
       })
     });
-    return await response.json();
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    console.log('점수 저장 응답:', result);
+    return result;
   } catch (error) {
     console.error('점수 저장 오류:', error);
     return { success: false, isNewRecord: false };

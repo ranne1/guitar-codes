@@ -370,6 +370,7 @@ export function FretboardMatchGame({ onBack }: FretboardMatchGameProps) {
 
         {/* 리더보드 모달 */}
         <Leaderboard
+          key={showLeaderboard ? 'open' : 'closed'}
           gameMode="fretboard-match"
           isOpen={showLeaderboard}
           onClose={() => setShowLeaderboard(false)}
