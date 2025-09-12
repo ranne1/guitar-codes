@@ -125,7 +125,7 @@ export function GuitarChordCard({ chord, isSelected, onClick, showName = false }
 
   return (
     <Card 
-      className={`cursor-pointer transition-all duration-200 hover:shadow-md min-h-[112px] ${
+      className={`cursor-pointer transition-all duration-200 hover:shadow-md min-h-[107px] ${
         isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : ''
       }`}
       onClick={onClick}
