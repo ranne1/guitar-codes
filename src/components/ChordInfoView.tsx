@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { ArrowLeft, Music, Search, BookOpen, Info, Trophy } from "lucide-react";
+import { ArrowLeft, Music, Search, BookOpen, Info } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Badge } from "./ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Leaderboard } from "./Leaderboard";
 
 interface FretPosition {
   string: number; // 1-6 (6번줄이 가장 두꺼운 줄)
@@ -413,7 +412,6 @@ export function ChordInfoView({ onBack }: ChordInfoViewProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("전체");
   const [selectedChord, setSelectedChord] = useState<ChordInfo | null>(null);
-  const [showLeaderboard, setShowLeaderboard] = useState(false);
 
   const categories = ["전체", "메이저", "마이너", "세븐스", "바레", "기타"];
 
@@ -603,14 +601,6 @@ export function ChordInfoView({ onBack }: ChordInfoViewProps) {
           </div>
           
           <div className="flex items-center gap-2">
-            <Button 
-              variant="outline" 
-              onClick={() => setShowLeaderboard(true)}
-              className="flex items-center gap-2"
-            >
-              <Trophy className="w-4 h-4" />
-              리더보드
-            </Button>
             <div className="flex items-center gap-2">
               <BookOpen className="w-5 h-5 text-teal-600" />
               <span className="text-sm font-medium text-teal-600">
@@ -711,13 +701,6 @@ export function ChordInfoView({ onBack }: ChordInfoViewProps) {
 
         {/* 코드 상세 정보 모달 */}
         {selectedChord && renderChordDetail(selectedChord)}
-
-        {/* 리더보드 모달 */}
-        <Leaderboard
-          gameMode="fretboard-match"
-          isOpen={showLeaderboard}
-          onClose={() => setShowLeaderboard(false)}
-        />
       </div>
     </div>
   );
