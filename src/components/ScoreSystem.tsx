@@ -38,7 +38,7 @@ function saveScores(scores: any) {
   }
 }
 
-async function fetchBestScore(gameMode: string): Promise<number> {
+function fetchBestScore(gameMode: string): number {
   try {
     console.log('최고점 조회 시도:', gameMode);
     const scores = getScores();
@@ -128,12 +128,12 @@ export function useScoreSystem(gameMode: string, maxTime: number = 10) {
 
   // 게임 모드가 변경될 때마다 최고점 로드
   useEffect(() => {
-    const loadBestScore = async () => {
+    const loadBestScore = () => {
       console.log('=== 최고점 로드 시작 ===');
       console.log('게임모드:', gameMode);
       console.log('현재 localStorage 데이터:', localStorage.getItem(STORAGE_KEY));
       
-      const score = await fetchBestScore(gameMode);
+      const score = fetchBestScore(gameMode);
       console.log('로드된 최고점:', score, '게임모드:', gameMode);
       setBestScore(score);
       
