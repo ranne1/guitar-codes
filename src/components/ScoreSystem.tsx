@@ -22,7 +22,7 @@ const API_BASE_URL = '/api';
 
 async function fetchBestScore(gameMode: string): Promise<number> {
   try {
-    const response = await fetch(`${API_BASE_URL}/scores/${gameMode}`);
+    const response = await fetch(`${API_BASE_URL}/scores?gameMode=${gameMode}`);
     const data = await response.json();
     return data.bestScore || 0;
   } catch (error) {

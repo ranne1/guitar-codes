@@ -41,7 +41,7 @@ export function Leaderboard({ gameMode, isOpen, onClose }: LeaderboardProps) {
     setLoading(true);
     try {
       console.log('리더보드 조회 시도:', gameMode);
-      const response = await fetch(`${API_BASE_URL}/scores/${gameMode}/leaderboard?limit=20`);
+      const response = await fetch(`${API_BASE_URL}/leaderboard?gameMode=${gameMode}&limit=20`);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

@@ -31,8 +31,7 @@ export default function handler(req, res) {
 
   if (req.method === 'GET') {
     // 리더보드 조회
-    const { gameMode } = req.query;
-    const limit = parseInt(req.query.limit) || 10;
+    const { gameMode, limit = 10 } = req.query;
     
     console.log('리더보드 조회 요청:', gameMode, 'limit:', limit);
     
@@ -44,7 +43,7 @@ export default function handler(req, res) {
     }
     
     const leaderboard = scores[gameMode]
-      .slice(0, limit)
+      .slice(0, parseInt(limit))
       .map((score, index) => ({
         rank: index + 1,
         playerName: score.playerName,

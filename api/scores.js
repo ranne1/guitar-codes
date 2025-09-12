@@ -43,27 +43,45 @@ export default function handler(req, res) {
     return;
   }
 
-  if (req.method === 'POST') {
+  const { gameMode } = req.query;
+
+  if (req.method === 'GET') {
+    // 최고점 조회
+    const scores = readScores();
+    
+    console.log('최고점 조회 요청:', gameMode);
+    console.log('현재 점수 데이터:', scores);
+    
+    if (!scores[gameMode] || scores[gameMode].length === 0) {
+      console.log('게임 모드에 점수 없음:', gameMode);
+      return res.json({ bestScore: 0 });
+    }
+    
+    const bestScore = Math.max(...scores[gameMode].map(score => score.score));
+    console.log('계산된 최고점:', bestScore, '게임모드:', gameMode);
+    res.json({ bestScore });
+  } else if (req.method === 'POST') {
     // 점수 저장
-    const { gameMode, playerName, score } = req.body;
+    const { gameMode: bodyGameMode, playerName, score } = req.body;
+    const targetGameMode = gameMode || bodyGameMode;
     
-    console.log('점수 저장 요청:', { gameMode, playerName, score });
+    console.log('점수 저장 요청:', { gameMode: targetGameMode, playerName, score });
     
-    if (!gameMode || score === undefined) {
+    if (!targetGameMode || score === undefined) {
       return res.status(400).json({ error: 'gameMode와 score는 필수입니다.' });
     }
     
     const scores = readScores();
     
     // 게임 모드별 점수 배열 초기화
-    if (!scores[gameMode]) {
-      scores[gameMode] = [];
-      console.log('새 게임 모드 생성:', gameMode);
+    if (!scores[targetGameMode]) {
+      scores[targetGameMode] = [];
+      console.log('새 게임 모드 생성:', targetGameMode);
     }
     
     // 현재 최고점 확인
-    const currentBest = scores[gameMode].length > 0 
-      ? Math.max(...scores[gameMode].map(s => s.score)) 
+    const currentBest = scores[targetGameMode].length > 0 
+      ? Math.max(...scores[targetGameMode].map(s => s.score)) 
       : 0;
     
     const isNewRecord = score > currentBest;
@@ -77,20 +95,20 @@ export default function handler(req, res) {
       timestamp: new Date().toISOString()
     };
     
-    scores[gameMode].push(newScore);
+    scores[targetGameMode].push(newScore);
     
     // 점수 순으로 정렬 (높은 점수부터)
-    scores[gameMode].sort((a, b) => b.score - a.score);
+    scores[targetGameMode].sort((a, b) => b.score - a.score);
     
     // 상위 100개만 유지
-    if (scores[gameMode].length > 100) {
-      scores[gameMode] = scores[gameMode].slice(0, 100);
+    if (scores[targetGameMode].length > 100) {
+      scores[targetGameMode] = scores[targetGameMode].slice(0, 100);
     }
     
     saveScores(scores);
     
     // 순위 계산
-    const rank = scores[gameMode].findIndex(s => s.id === newScore.id) + 1;
+    const rank = scores[targetGameMode].findIndex(s => s.id === newScore.id) + 1;
     
     res.json({
       success: true,
@@ -101,7 +119,7 @@ export default function handler(req, res) {
       playerName: newScore.playerName
     });
   } else {
-    res.setHeader('Allow', ['POST']);
+    res.setHeader('Allow', ['GET', 'POST']);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
