@@ -133,7 +133,7 @@ const chordDatabase: ChordInfo[] = [
     ],
     category: "메이저"
   },
-  {
+  /*{
     name: "B",
     fullName: "B Major",
     positions: [
@@ -152,9 +152,9 @@ const chordDatabase: ChordInfo[] = [
     ],
     category: "바레"
   },
-
+*/
   // 마이너 코드 (7개)
-  {
+ /* {
     name: "Cm",
     fullName: "C Minor",
     positions: [
@@ -172,7 +172,7 @@ const chordDatabase: ChordInfo[] = [
       "정확한 손가락 위치가 중요합니다"
     ],
     category: "마이너"
-  },
+  },*/
   {
     name: "Dm",
     fullName: "D Minor",
@@ -226,7 +226,7 @@ const chordDatabase: ChordInfo[] = [
     ],
     category: "바레"
   },
-  {
+  /*{
     name: "Gm",
     fullName: "G Minor",
     positions: [
@@ -245,7 +245,7 @@ const chordDatabase: ChordInfo[] = [
       "복잡한 손가락 배치가 필요합니다"
     ],
     category: "바레"
-  },
+  },*/
   {
     name: "Am",
     fullName: "A Minor",
@@ -263,7 +263,7 @@ const chordDatabase: ChordInfo[] = [
     ],
     category: "마이너"
   },
-  {
+  /*{
     name: "Bm",
     fullName: "B Minor",
     positions: [
@@ -282,7 +282,7 @@ const chordDatabase: ChordInfo[] = [
     ],
     category: "바레"
   },
-
+*/
   // 7th 코드 (7개)
   {
     name: "C7",
@@ -387,7 +387,7 @@ const chordDatabase: ChordInfo[] = [
       "손가락 두 개만 사용합니다"
     ],
     category: "세븐스"
-  },
+  }/*,
   {
     name: "B7",
     fullName: "B Dominant 7th",
@@ -405,7 +405,7 @@ const chordDatabase: ChordInfo[] = [
       "정확한 손가락 위치가 중요합니다"
     ],
     category: "세븐스"
-  }
+  }*/
 ];
 
 export function ChordInfoView({ onBack }: ChordInfoViewProps) {

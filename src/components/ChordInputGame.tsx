@@ -548,8 +548,7 @@ export function ChordInputGame({ onBack }: ChordInputGameProps) {
               {!gameCompleted && (
                 <Button 
                   onClick={endGame}
-                  variant="destructive"
-                  className="px-6 py-2"
+                  className="bg-blue-500 hover:bg-blue-600 px-8 py-2"
                 >
                   <Square className="w-4 h-4 mr-2" />
                   게임종료

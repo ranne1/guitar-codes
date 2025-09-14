@@ -170,10 +170,10 @@ export function FretboardMatchGame({ onBack }: FretboardMatchGameProps) {
     }
   ];
 
-  // 게임 시작 시 랜덤으로 3개 코드 선택
+  // 게임 시작 시 랜덤으로 4개 코드 선택
   const initializeGame = () => {
     const shuffledChords = [...chords].sort(() => Math.random() - 0.5);
-    const selectedChords = shuffledChords.slice(0, 3);
+    const selectedChords = shuffledChords.slice(0, 4);
     const selectedNames = selectedChords.map(chord => chord.name).sort(() => Math.random() - 0.5);
     
     setGameChords(selectedChords);
@@ -345,8 +345,7 @@ export function FretboardMatchGame({ onBack }: FretboardMatchGameProps) {
           <div className="mt-6 text-center">
             <Button 
               onClick={endGame}
-              variant="destructive"
-              className="px-6 py-2"
+              className="bg-blue-500 hover:bg-blue-600 px-8 py-2"
             >
               <Square className="w-4 h-4 mr-2" />
               게임종료
