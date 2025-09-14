@@ -42,46 +42,46 @@ export function FretboardMatchGame({ onBack }: FretboardMatchGameProps) {
       id: "D", 
       name: "D", 
       frets: [2, 3, 2, 0, null, null], 
-      fingers: [1, 3, 2, null, null, null] 
+      fingers: [2, 3, 1, null, null, null] 
     },
     { 
       id: "E", 
       name: "E", 
       frets: [0, 0, 1, 2, 2, 0], 
-      fingers: [null, null, 1, 2, 3, null] 
+      fingers: [null, null, 1, 3, 2, null] 
     },
     { 
       id: "F", 
       name: "F", 
       frets: [1, 1, 2, 3, 3, 1], 
-      fingers: [1, 1, 2, 3, 4, 1] 
+      fingers: [1, 1, 2, 4, 3, 1] 
     },
     { 
       id: "G", 
       name: "G", 
       frets: [3, 0, 0, 0, 2, 3], 
-      fingers: [3, null, null, null, 2, 4] 
+      fingers: [4, null, null, null, 2, 3] 
     },
     { 
       id: "A", 
       name: "A", 
       frets: [0, 2, 2, 2, 0, null], 
-      fingers: [null, 1, 2, 3, null, null] 
+      fingers: [null, 3, 2, 1, null, null] 
     },
-    { 
+    /*{ 
       id: "B", 
       name: "B", 
       frets: [2, 4, 4, 4, 2, null], 
       fingers: [1, 2, 3, 4, 1, null] 
-    },
+    },*/
 
     // 마이너 코드 (7개)
-    { 
+    /*{ 
       id: "Cm", 
       name: "Cm", 
       frets: [null, 1, 1, 3, 4, 3], 
       fingers: [null, 1, 1, 2, 4, 3] 
-    },
+    },*/
     { 
       id: "Dm", 
       name: "Dm", 
@@ -92,33 +92,32 @@ export function FretboardMatchGame({ onBack }: FretboardMatchGameProps) {
       id: "Em", 
       name: "Em", 
       frets: [0, 0, 0, 2, 2, 0], 
-      fingers: [null, null, null, 2, 3, null] 
+      fingers: [null, null, null, 3, 2, null] 
     },
     { 
       id: "Fm", 
       name: "Fm", 
       frets: [1, 1, 1, 3, 3, 1], 
-      fingers: [1, 1, 1, 3, 4, 1] 
+      fingers: [1, 1, 1, 4, 3, 1] 
     },
-    { 
+   /* { 
       id: "Gm", 
       name: "Gm", 
       frets: [3, 1, 1, 3, 3, 3], 
       fingers: [3, 1, 1, 2, 4, 3] 
-    },
+    },*/
     { 
       id: "Am", 
       name: "Am", 
       frets: [0, 1, 2, 2, 0, null], 
-      fingers: [null, 1, 2, 3, null, null] 
+      fingers: [null, 1, 3, 2, null, null] 
     },
     { 
       id: "Bm", 
       name: "Bm", 
       frets: [2, 3, 4, 4, 2, null], 
-      fingers: [1, 2, 3, 4, 1, null] 
+      fingers: [1, 2, 4, 3, 1, null] 
     },
-
     // 7th 코드 (7개)
     { 
       id: "C7", 
@@ -130,7 +129,7 @@ export function FretboardMatchGame({ onBack }: FretboardMatchGameProps) {
       id: "D7", 
       name: "D7", 
       frets: [2, 1, 2, 0, null, null], 
-      fingers: [2, 1, 3, null, null, null] 
+      fingers: [3, 1, 2, null, null, null] 
     },
     { 
       id: "E7", 
@@ -138,12 +137,12 @@ export function FretboardMatchGame({ onBack }: FretboardMatchGameProps) {
       frets: [0, 0, 1, 0, 2, 0], 
       fingers: [null, null, 1, null, 2, null] 
     },
-    { 
+    /*{ 
       id: "F7", 
       name: "F7", 
       frets: [1, 1, 2, 1, 3, 1], 
       fingers: [1, 1, 2, 1, 3, 1] 
-    },
+    },*/
     { 
       id: "G7", 
       name: "G7", 
@@ -154,20 +153,27 @@ export function FretboardMatchGame({ onBack }: FretboardMatchGameProps) {
       id: "A7", 
       name: "A7", 
       frets: [0, 2, 0, 2, 0, null], 
-      fingers: [null, 2, null, 3, null, null] 
+      fingers: [null, 3, null, 2, null, null] 
     },
-    { 
+    /*{ 
       id: "B7", 
       name: "B7", 
       frets: [null, 1, 3, 2, 4, null], 
       fingers: [null, 1, 3, 2, 4, null] 
+    },*/
+    // 7th 코드 (7개)
+    { 
+      id: "E7sus4", 
+      name: "E7sus4", 
+      frets: [0, 0, 2, 0, 2, 0], 
+      fingers: [null, null, 3, null, 2, null] 
     }
   ];
 
-  // 게임 시작 시 랜덤으로 8개 코드 선택
+  // 게임 시작 시 랜덤으로 3개 코드 선택
   const initializeGame = () => {
     const shuffledChords = [...chords].sort(() => Math.random() - 0.5);
-    const selectedChords = shuffledChords.slice(0, 8);
+    const selectedChords = shuffledChords.slice(0, 3);
     const selectedNames = selectedChords.map(chord => chord.name).sort(() => Math.random() - 0.5);
     
     setGameChords(selectedChords);
