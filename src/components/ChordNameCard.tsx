@@ -16,7 +16,7 @@ export function ChordNameCard({ chordName, isSelected, isMatched = false, onClic
 
   return (
     <Card 
-      className={`cursor-pointer transition-all duration-200 hover:shadow-md min-h-[112px] ${getCardStyle()}`}
+      className={`cursor-pointer transition-all duration-200 hover:shadow-md min-h-[100px] ${getCardStyle()}`}
       onClick={onClick}
     >
       <CardContent className="p-3 flex items-center justify-center h-full">

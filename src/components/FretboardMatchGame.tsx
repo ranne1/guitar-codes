@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { GuitarChordCard } from "./GuitarChordCard";
 import { ChordNameCard } from "./ChordNameCard";
 import { Button } from "./ui/button";
-import { ArrowLeft, RotateCcw, Trophy, Square } from "lucide-react";
+import { ArrowLeft, RotateCcw, Trophy } from "lucide-react";
 import { useScoreSystem, ScoreDisplay, ResultDisplay } from "./ScoreSystem";
 import { Leaderboard } from "./Leaderboard";
 
@@ -214,14 +214,6 @@ export function FretboardMatchGame({ onBack }: FretboardMatchGameProps) {
     scoreSystem.resetGame();
   };
 
-  // 게임 종료 (중간에 종료)
-  const endGame = async () => {
-    if (scoreSystem.totalScore > 0) {
-      // completeRound를 사용해서 자동으로 점수 저장
-      await scoreSystem.completeRound(scoreSystem.totalScore);
-    }
-    setIsGameCompleted(true);
-  };
 
   useEffect(() => {
     if (selectedChord && selectedName) {
@@ -249,8 +241,13 @@ export function FretboardMatchGame({ onBack }: FretboardMatchGameProps) {
   useEffect(() => {
     if (gameChords.length > 0 && matches.size === gameChords.length * 2 && !isGameCompleted) {
       setIsGameCompleted(true);
+      
+      // 게임 완료 시 가산점 추가 (모든 코드를 맞춘 경우)
+      const bonusScore = 50; // 가산점 50점
+      scoreSystem.addBonusScore(bonusScore);
+      
       const isNewRecord = scoreSystem.completeRound(scoreSystem.totalScore);
-      console.log('게임 완료! 신기록:', isNewRecord, '총점:', scoreSystem.totalScore);
+      console.log('게임 완료! 가산점:', bonusScore, '신기록:', isNewRecord, '총점:', scoreSystem.totalScore);
     }
   }, [matches.size, gameChords.length, isGameCompleted, scoreSystem]);
 
@@ -336,22 +333,10 @@ export function FretboardMatchGame({ onBack }: FretboardMatchGameProps) {
             왼쪽의 기타 코드 지판과 오른쪽의 코드명을 매치하세요.
           </p>
           <p className="text-xs text-gray-500">
-            ⏱️ 빠를수록 높은 점수! 1초 이내: 100점, 2초 이내: 90점... 10초 이후: 10점
+            🎯 코드명 하나 맞추기: 10점 | 🏆 모든 코드 완성 시 가산점: 50점
           </p>
         </div>
 
-        {/* 게임 종료 버튼 */}
-        {!isGameCompleted && (
-          <div className="mt-6 text-center">
-            <Button 
-              onClick={endGame}
-              className="bg-blue-500 hover:bg-blue-600 px-8 py-2"
-            >
-              <Square className="w-4 h-4 mr-2" />
-              게임종료
-            </Button>
-          </div>
-        )}
 
         {/* 결과 모달 */}
         {isGameCompleted && (

@@ -155,23 +155,9 @@ export function useScoreSystem(gameMode: string, maxTime: number = 10) {
     setStartTime(null);
   };
 
-  // 정답 처리 (시간에 따른 점수 계산)
+  // 정답 처리 (고정 10점)
   const handleCorrectAnswer = () => {
-    if (!startTime) return 0;
-    
-    const elapsedTime = (Date.now() - startTime) / 1000;
-    let score = 10; // 기본 점수
-    
-    if (elapsedTime <= 1) score = 100; // 1초 이내: 10배
-    else if (elapsedTime <= 2) score = 90; // 2초 이내: 9배
-    else if (elapsedTime <= 3) score = 80; // 3초 이내: 8배
-    else if (elapsedTime <= 4) score = 70; // 4초 이내: 7배
-    else if (elapsedTime <= 5) score = 60; // 5초 이내: 6배
-    else if (elapsedTime <= 6) score = 50; // 6초 이내: 5배
-    else if (elapsedTime <= 7) score = 40; // 7초 이내: 4배
-    else if (elapsedTime <= 8) score = 30; // 8초 이내: 3배
-    else if (elapsedTime <= 9) score = 20; // 9초 이내: 2배
-    else score = 10; // 10초 이후: 1배
+    const score = 10; // 고정 점수
     
     setCurrentScore(score);
     setTotalScore(prev => prev + score);
@@ -185,6 +171,13 @@ export function useScoreSystem(gameMode: string, maxTime: number = 10) {
     setCurrentScore(0);
     setIsActive(false);
     return 0;
+  };
+
+  // 가산점 추가
+  const addBonusScore = (bonus: number) => {
+    setCurrentScore(bonus);
+    setTotalScore(prev => prev + bonus);
+    return bonus;
   };
 
   // 라운드 완료 처리 (자동으로 이름 입력 받고 저장)
@@ -270,6 +263,7 @@ export function useScoreSystem(gameMode: string, maxTime: number = 10) {
     stopTimer,
     handleCorrectAnswer,
     handleWrongAnswer,
+    addBonusScore,
     completeRound,
     resetGame,
     currentScore,

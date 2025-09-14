@@ -77,7 +77,7 @@ export default function App() {
           
           <GameModeCard
             title="코드 정보 보기"
-            description="21개 기본 코드의 상세 정보와 연주 팁을 확인하세요"
+            description="16개 기본 코드의 상세 정보와 연주 팁을 확인하세요"
             icon={BookOpen}
             color="bg-teal-500"
             onClick={() => handleGameMode("코드 정보")}
