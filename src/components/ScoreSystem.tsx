@@ -57,9 +57,9 @@ function fetchBestScore(gameMode: string): number {
   }
 }
 
-async function saveScore(gameMode: string, playerName: string, score: number) {
+async function saveScore(gameMode: string, playerName: string, score: number, gameSessionId?: string) {
   try {
-    console.log('점수 저장 시도:', { gameMode, playerName, score });
+    console.log('점수 저장 시도:', { gameMode, playerName, score, gameSessionId });
     
     const scores = getScores();
     
@@ -76,12 +76,38 @@ async function saveScore(gameMode: string, playerName: string, score: number) {
     const isNewRecord = score > currentBest;
     console.log('현재 최고점:', currentBest, '새 점수:', score, '신기록 여부:', isNewRecord);
     
+    // 같은 게임 세션에서 이름만 변경된 경우 기존 점수 업데이트
+    if (gameSessionId) {
+      const existingScoreIndex = scores[gameMode].findIndex((s: any) => s.gameSessionId === gameSessionId);
+      if (existingScoreIndex !== -1) {
+        console.log('기존 점수 업데이트:', existingScoreIndex);
+        scores[gameMode][existingScoreIndex].playerName = playerName || 'Anonymous';
+        scores[gameMode][existingScoreIndex].timestamp = new Date().toISOString();
+        
+        saveScores(scores);
+        
+        const result = {
+          success: true,
+          isNewRecord,
+          previousBest: currentBest,
+          newScore: score,
+          rank: existingScoreIndex + 1,
+          playerName: playerName || 'Anonymous',
+          updated: true
+        };
+        
+        console.log('점수 업데이트 완료:', result);
+        return result;
+      }
+    }
+    
     // 새 점수 추가
     const newScore = {
       id: Date.now(),
       playerName: playerName || 'Anonymous',
       score: score,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      gameSessionId: gameSessionId || null
     };
     
     scores[gameMode].push(newScore);
@@ -125,6 +151,7 @@ export function useScoreSystem(gameMode: string, maxTime: number = 10) {
   const [isNewRecord, setIsNewRecord] = useState(false);
   const [bestScore, setBestScore] = useState(0);
   const [playerName, setPlayerName] = useState('');
+  const [gameSessionId, setGameSessionId] = useState<string | null>(null);
 
   // 게임 모드가 변경될 때마다 최고점 로드
   useEffect(() => {
@@ -197,7 +224,7 @@ export function useScoreSystem(gameMode: string, maxTime: number = 10) {
     const isNewRecord = finalScore > bestScore;
     console.log('클라이언트 신기록 여부:', isNewRecord);
     
-    const result = await saveScore(gameMode, nameToUse, finalScore);
+    const result = await saveScore(gameMode, nameToUse, finalScore, gameSessionId || undefined);
     console.log('저장 결과:', result);
     
     if (result.success) {
@@ -238,6 +265,7 @@ export function useScoreSystem(gameMode: string, maxTime: number = 10) {
     setIsActive(false);
     setStartTime(null);
     setIsNewRecord(false);
+    setGameSessionId(Date.now().toString()); // 새로운 게임 세션 ID 생성
   };
 
   // 타이머 업데이트
