@@ -1,4 +1,4 @@
-ㅇimport { Card, CardContent } from "./ui/card";
+import { Card, CardContent } from "./ui/card";
 
 interface ChordData {
   id: string;
